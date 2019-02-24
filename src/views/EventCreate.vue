@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import Datepicker from "vuejs-datepicker";
 
 export default {
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     createFreshEventObject() {
-      const user = this.$store.state.user,
+      const user = this.$store.state.user.user,
         id = Math.floor(Math.random() * 10000000);
 
       return {
@@ -88,7 +88,7 @@ export default {
     },
     createEvent() {
       this.$store
-        .dispatch("createEvent", this.event)
+        .dispatch("event/createEvent", this.event)
         .then(() => {
           this.$router.push({
             name: "event-show",
@@ -101,10 +101,7 @@ export default {
         });
     }
   },
-  computed: {
-    ...mapGetters(["activeTodos", "catLength", "getTodoById"]),
-    ...mapState(["user", "categories"])
-  }
+  computed: mapState(["user", "categories"])
 };
 </script>
 
