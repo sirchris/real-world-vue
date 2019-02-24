@@ -26,7 +26,8 @@ export default new Vuex.Store({
       { id: 4, text: "Go shopping", done: false }
     ],
     events: [],
-    eventsTotal: 0
+    eventsTotal: 0,
+    event: {}
   },
   mutations: {
     ADD_EVENT(state, event) {
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     },
     SET_TOTAL_EVENTS(state, amount) {
       state.eventsTotal = parseInt(amount, 10);
+    },
+    SET_EVENT(state, event) {
+      state.event = event;
     }
   },
   actions: {
@@ -54,6 +58,21 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(`There was an error: ${error.response}`);
         });
+    },
+    fetchEvent({ commit, getters }, id) {
+      const event = getters.getEventById(id);
+
+      if (event) {
+        commit("SET_EVENT", event);
+      } else {
+        EventService.getEvent(id)
+          .then(response => {
+            commit("SET_EVENT", response.data);
+          })
+          .catch(error => {
+            console.log(`There was an error: ${error.response}`);
+          });
+      }
     }
   },
   getters: {
@@ -65,6 +84,9 @@ export default new Vuex.Store({
     },
     getTodoById: state => id => {
       return state.todos.find(todo => todo.id === id);
+    },
+    getEventById: state => id => {
+      return state.events.find(event => event.id === id);
     }
   }
 });
