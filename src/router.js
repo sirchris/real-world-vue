@@ -12,8 +12,13 @@ export default new Router({
   routes: [
     {
       path: "/",
+      redirect: "1"
+    },
+    {
+      path: "/:id",
       name: "event-list",
-      component: EventList
+      component: EventList,
+      props: true
     },
     {
       path: "/event/create",
